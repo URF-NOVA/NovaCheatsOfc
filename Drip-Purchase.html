@@ -192,7 +192,7 @@
             background: #1a8de4; transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(42, 157, 244, 0.4);
         }
-        
+
         /* Mobile friendly adjustments */
         @media (max-width: 480px) {
             .qr-box img { width: 180px; height: 180px; }
@@ -235,7 +235,7 @@
             <img id="qrImage" src="" alt="UPI QR Code">
             <div class="upi-id">UPI ID: 8750673645@fam</div>
             <div class="btn-group">
-                <a id="upiLink" href="" class="pay-btn">Pay with UPI App</a>
+                <button class="pay-btn" id="payBtn" onclick="openUPIApp()">Pay with UPI App</button>
                 <button class="download-btn" id="downloadBtn" onclick="downloadQR()">
                     📥 Download QR Code
                 </button>
@@ -288,25 +288,48 @@
         let timerInterval;
         let currentQRUrl = '';
         let currentAmount = 0;
+        let currentUPILink = '';
 
         function generateQR(amount, plan) {
             currentAmount = amount;
             const upiId = '8750673645@fam';
             const name = 'Plan Purchase';
-            const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(plan + ' Plan')}`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
 
+            // Properly encode the UPI link
+            const upiLink = 'upi://pay?pa=' + encodeURIComponent(upiId) 
+                + '&pn=' + encodeURIComponent(name) 
+                + '&am=' + amount 
+                + '&cu=INR' 
+                + '&tn=' + encodeURIComponent(plan + ' Plan');
+
+            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(upiLink);
+
+            currentUPILink = upiLink;
             currentQRUrl = qrUrl;
             document.getElementById('qrAmount').textContent = '₹' + amount;
             document.getElementById('qrImage').src = qrUrl;
-            document.getElementById('upiLink').href = upiLink;
             document.getElementById('qrOverlay').classList.add('active');
             document.getElementById('downloadBtn').disabled = false;
         }
 
+        function openUPIApp() {
+            if (!currentUPILink) return;
+
+            // Method 1: Try window.location (best for mobile)
+            window.location.href = currentUPILink;
+
+            // Method 2: Also try opening in new tab as fallback
+            setTimeout(function() {
+                var newTab = window.open(currentUPILink, '_blank');
+                if (newTab) {
+                    newTab.focus();
+                }
+            }, 100);
+        }
+
         function downloadQR() {
             if (!currentQRUrl) return;
-            
+
             // For Chrome, use fetch to download the image properly
             fetch(currentQRUrl)
                 .then(response => response.blob())
@@ -362,7 +385,7 @@
         function updateBigTimer(seconds) {
             const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
             const secs = (seconds % 60).toString().padStart(2, '0');
-            document.getElementById('bigTimer').textContent = `${mins}:${secs}`;
+            document.getElementById('bigTimer').textContent = mins + ':' + secs;
         }
 
         function closeQR() {
