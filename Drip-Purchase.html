@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Your Plan</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4a7c59 0%, #6b8f71 50%, #4a7c59 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header-icon { font-size: 24px; }
+        .header-text { font-size: 18px; font-weight: 600; color: #333; }
+        .header-time { margin-left: auto; font-size: 14px; color: #888; }
+        .plan-btn {
+            width: 100%; padding: 18px 20px; margin-bottom: 12px; border: none;
+            border-radius: 15px; background: #2a9df4; color: white;
+            font-size: 20px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(42, 157, 244, 0.3);
+        }
+        .plan-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(42, 157, 244, 0.4); }
+        .plan-btn:active { transform: translateY(0); }
+        .buy-icon {
+            background: #e63946; color: white; padding: 3px 8px;
+            border-radius: 4px; font-size: 11px; font-weight: bold;
+            letter-spacing: 1px; box-shadow: 0 2px 5px rgba(230, 57, 70, 0.4);
+        }
+        .back-btn {
+            width: 100%; padding: 18px 20px; border: none; border-radius: 15px;
+            background: #c45c4a; color: white; font-size: 18px; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 10px; margin-top: 5px; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(196, 92, 74, 0.3);
+        }
+        .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(196, 92, 74, 0.4); }
+        .back-icon { font-size: 22px; }
+
+        /* QR Modal */
+        .qr-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7);
+            z-index: 1000; justify-content: center; align-items: center;
+            padding: 20px;
+        }
+        .qr-overlay.active { display: flex; }
+        .qr-box {
+            background: white; border-radius: 20px; padding: 30px;
+            text-align: center; max-width: 350px; width: 100%;
+            animation: popIn 0.3s ease;
+        }
+        @keyframes popIn {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .qr-box h2 { color: #333; margin-bottom: 10px; font-size: 22px; }
+        .qr-box .amount { color: #2a9df4; font-size: 28px; font-weight: bold; margin-bottom: 15px; }
+        .qr-box img { width: 220px; height: 220px; border-radius: 10px; margin-bottom: 10px; }
+        .qr-box .upi-id { color: #666; font-size: 14px; margin-bottom: 15px; word-break: break-all; }
+
+        /* Timer */
+        .timer-box {
+            background: #fff3cd; border: 2px solid #ffc107;
+            border-radius: 10px; padding: 10px 20px; margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 8px;
+        }
+        .timer-box .timer-icon { font-size: 20px; }
+        .timer-box .timer-text { font-size: 18px; font-weight: bold; color: #856404; }
+        .timer-box.expired { background: #f8d7da; border-color: #dc3545; }
+        .timer-box.expired .timer-text { color: #721c24; }
+
+        /* Buttons in modal */
+        .btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .pay-btn {
+            background: #2a9df4; color: white; border: none; padding: 14px 40px;
+            border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s; text-decoration: none; display: inline-block;
+        }
+        .pay-btn:hover { background: #1a8de4; }
+        .download-btn {
+            background: #28a745; color: white; border: none; padding: 14px 40px;
+            border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s; display: inline-flex; align-items: center;
+            justify-content: center; gap: 8px; text-decoration: none;
+        }
+        .download-btn:hover { background: #218838; }
+        .download-btn:disabled {
+            opacity: 0.5; cursor: not-allowed;
+        }
+        .close-btn {
+            background: #e63946; color: white; border: none; padding: 12px 40px;
+            border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .close-btn:hover { background: #d62839; }
+        .disabled-btn {
+            opacity: 0.5; cursor: not-allowed; pointer-events: none;
+        }
+
+        /* Timer Running Modal (after download) */
+        .timer-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
+            z-index: 2000; justify-content: center; align-items: center;
+            padding: 20px;
+        }
+        .timer-overlay.active { display: flex; }
+        .timer-box2 {
+            background: white; border-radius: 20px; padding: 40px 30px;
+            text-align: center; max-width: 350px; width: 100%;
+            animation: popIn 0.3s ease;
+        }
+        .timer-box2 .big-timer {
+            font-size: 56px; font-weight: bold; color: #2a9df4;
+            margin: 20px 0; font-family: 'Courier New', monospace;
+        }
+        .timer-box2 p {
+            color: #666; font-size: 16px; margin-bottom: 10px;
+        }
+        .timer-box2 .processing {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; margin-top: 15px;
+        }
+        .spinner {
+            width: 24px; height: 24px; border: 3px solid #2a9df4;
+            border-top: 3px solid transparent; border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Approval Modal */
+        .approval-overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
+            z-index: 3000; justify-content: center; align-items: center;
+            padding: 20px;
+        }
+        .approval-overlay.active { display: flex; }
+        .approval-box {
+            background: white; border-radius: 20px; padding: 35px 30px;
+            text-align: center; max-width: 380px; width: 100%;
+            animation: popIn 0.3s ease;
+        }
+        .approval-box .icon { font-size: 50px; margin-bottom: 15px; }
+        .approval-box h2 {
+            color: #333; font-size: 20px; font-weight: bold;
+            margin-bottom: 15px; text-transform: uppercase;
+        }
+        .approval-box .line {
+            width: 60px; height: 3px; background: #2a9df4;
+            margin: 0 auto 15px auto; border-radius: 2px;
+        }
+        .approval-box .wait-text {
+            color: #666; font-size: 16px; margin-bottom: 25px;
+            font-weight: 500;
+        }
+        .approval-box .send-btn {
+            background: #2a9df4; color: white; border: none;
+            padding: 16px 50px; border-radius: 30px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            transition: all 0.3s; display: inline-flex;
+            align-items: center; justify-content: center; gap: 10px;
+            text-decoration: none;
+        }
+        .approval-box .send-btn:hover {
+            background: #1a8de4; transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(42, 157, 244, 0.4);
+        }
+        
+        /* Mobile friendly adjustments */
+        @media (max-width: 480px) {
+            .qr-box img { width: 180px; height: 180px; }
+            .plan-btn { font-size: 16px; padding: 15px; }
+            .header-text { font-size: 16px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="header-icon">👉</span>
+            <span class="header-text">Choose Your Drip Key Days:</span>
+            <span class="header-time" id="currentTime">2:57 PM</span>
+        </div>
+
+        <button class="plan-btn" onclick="generateQR(65, '1 DAY')">
+            <span class="buy-icon">BUY</span>
+            <span>1 DAYS • ₹65</span>
+        </button>
+        <button class="plan-btn" onclick="generateQR(180, '7 DAYS')">
+            <span class="buy-icon">BUY</span>
+            <span>7 DAYS • ₹180</span>
+        </button>
+        <button class="plan-btn" onclick="generateQR(400, '30 DAYS')">
+            <span class="buy-icon">BUY</span>
+            <span>30 DAYS • ₹400</span>
+        </button>
+        <button class="back-btn" onclick="goBack()">
+            <span class="back-icon">↩️</span>
+            <span>BACK</span>
+        </button>
+    </div>
+
+    <!-- QR Code Modal -->
+    <div class="qr-overlay" id="qrOverlay">
+        <div class="qr-box">
+            <h2>Scan to Pay</h2>
+            <div class="amount" id="qrAmount">₹80</div>
+            <img id="qrImage" src="" alt="UPI QR Code">
+            <div class="upi-id">UPI ID: 8750673645@fam</div>
+            <div class="btn-group">
+                <a id="upiLink" href="" class="pay-btn">Pay with UPI App</a>
+                <button class="download-btn" id="downloadBtn" onclick="downloadQR()">
+                    📥 Download QR Code
+                </button>
+                <button class="close-btn" onclick="closeQR()">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Running Modal (after download) -->
+    <div class="timer-overlay" id="timerOverlay">
+        <div class="timer-box2">
+            <div class="icon">⏱️</div>
+            <h2>Payment Processing</h2>
+            <p>Please complete the payment and wait...</p>
+            <div class="big-timer" id="bigTimer">01:30</div>
+            <div class="processing">
+                <div class="spinner"></div>
+                <span style="color:#2a9df4; font-weight:600;">Processing...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Approval Modal -->
+    <div class="approval-overlay" id="approvalOverlay">
+        <div class="approval-box">
+            <div class="icon">📸</div>
+            <h2>SEND SCREENSHOT TO OWNER</h2>
+            <div class="line"></div>
+            <div class="wait-text">WAIT FOR OWNER APPROVAL</div>
+            <a href="tg://openmessage?user_id=7229517038" class="send-btn">
+                📤 SEND
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Update time
+        function updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            document.getElementById('currentTime').textContent = hours + ':' + minutes + ' ' + ampm;
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+
+        let timerInterval;
+        let currentQRUrl = '';
+        let currentAmount = 0;
+
+        function generateQR(amount, plan) {
+            currentAmount = amount;
+            const upiId = '8750673645@fam';
+            const name = 'Plan Purchase';
+            const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(plan + ' Plan')}`;
+            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+
+            currentQRUrl = qrUrl;
+            document.getElementById('qrAmount').textContent = '₹' + amount;
+            document.getElementById('qrImage').src = qrUrl;
+            document.getElementById('upiLink').href = upiLink;
+            document.getElementById('qrOverlay').classList.add('active');
+            document.getElementById('downloadBtn').disabled = false;
+        }
+
+        function downloadQR() {
+            if (!currentQRUrl) return;
+            
+            // For Chrome, use fetch to download the image properly
+            fetch(currentQRUrl)
+                .then(response => response.blob())
+                .then(blob => {
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    link.download = 'UPI_QR_Code.png';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(link.href);
+                })
+                .catch(() => {
+                    // Fallback method
+                    const link = document.createElement('a');
+                    link.href = currentQRUrl;
+                    link.download = 'UPI_QR_Code.png';
+                    link.target = '_blank';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+
+            // Disable download button
+            document.getElementById('downloadBtn').disabled = true;
+
+            // Close QR modal and show timer modal
+            document.getElementById('qrOverlay').classList.remove('active');
+            document.getElementById('timerOverlay').classList.add('active');
+
+            // Start 1:30 timer
+            startTimer(90);
+        }
+
+        function startTimer(seconds) {
+            clearInterval(timerInterval);
+            let remaining = seconds;
+            updateBigTimer(remaining);
+
+            timerInterval = setInterval(() => {
+                remaining--;
+                updateBigTimer(remaining);
+
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    // Timer finished - show approval modal
+                    document.getElementById('timerOverlay').classList.remove('active');
+                    document.getElementById('approvalOverlay').classList.add('active');
+                }
+            }, 1000);
+        }
+
+        function updateBigTimer(seconds) {
+            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            const secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('bigTimer').textContent = `${mins}:${secs}`;
+        }
+
+        function closeQR() {
+            clearInterval(timerInterval);
+            document.getElementById('qrOverlay').classList.remove('active');
+            document.getElementById('timerOverlay').classList.remove('active');
+            document.getElementById('approvalOverlay').classList.remove('active');
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Close on overlay click
+        document.getElementById('qrOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeQR();
+        });
+        document.getElementById('timerOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeQR();
+        });
+        document.getElementById('approvalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeQR();
+        });
+    </script>
+</body>
+</html>
