@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAFE LOCATION - NOVA CHEATS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --dark-bg: #1a0f26;
+            --card-bg: #2a1a3a;
+            --text-light: #ffffff;
+            --text-dark-grey: #b0b0b0;
+            --primary-purple: #8a2be2;
+            --primary-yellow: #f9d423;
+            --button-bg: #4a2a6a;
+            --button-hover: #6a3a8a;
+            --success: #00d26a;
+            --danger: #ff4757;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--dark-bg);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            color: var(--text-light);
+            padding: 20px;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-light);
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .back-button:hover { color: var(--primary-yellow); }
+
+        .page-title {
+            font-size: 1.8em;
+            color: var(--primary-yellow);
+            margin-bottom: 10px;
+        }
+
+        /* ===== MAIN DOWNLOAD ===== */
+        .main-download-section {
+            background: linear-gradient(135deg, rgba(138,43,226,0.2), rgba(249,212,35,0.1));
+            border: 2px solid var(--primary-purple);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-download-section::before {
+            content: 'LATEST';
+            position: absolute;
+            top: 10px;
+            right: -25px;
+            background: var(--primary-yellow);
+            color: var(--dark-bg);
+            padding: 3px 30px;
+            font-size: 0.7em;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+
+        .main-download-section h3 {
+            color: var(--primary-yellow);
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .main-file-info {
+            text-align: left;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+        }
+
+        .main-file-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            color: var(--text-dark-grey);
+        }
+
+        .main-file-info p strong {
+            color: var(--text-light);
+        }
+
+        .main-download-btn {
+            background: linear-gradient(135deg, var(--primary-purple), var(--primary-yellow));
+            color: white;
+            padding: 18px 40px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .main-download-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 25px rgba(138,43,226,0.4);
+        }
+
+        .no-today-file {
+            color: var(--text-dark-grey);
+            font-style: italic;
+            padding: 20px;
+        }
+
+        .info-box {
+            background-color: var(--button-bg);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .info-box h4 {
+            color: var(--primary-yellow);
+            margin-top: 0;
+        }
+
+        /* ===== PREVIOUS UPLOADS ===== */
+        .previous-section {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .previous-section h3 {
+            color: var(--text-dark-grey);
+            margin-bottom: 15px;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .date-group { margin-bottom: 20px; }
+
+        .date-label {
+            color: var(--primary-yellow);
+            font-size: 0.85em;
+            margin-bottom: 10px;
+            padding-left: 5px;
+            border-left: 3px solid var(--primary-yellow);
+        }
+
+        .file-buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+        }
+
+        .file-btn {
+            background: var(--button-bg);
+            border: 1px solid #3a2060;
+            color: var(--text-light);
+            padding: 12px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            font-size: 0.85em;
+        }
+
+        .file-btn:hover {
+            background: var(--button-hover);
+            transform: translateY(-2px);
+            border-color: var(--primary-purple);
+        }
+
+        .file-btn i {
+            display: block;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+            color: var(--primary-purple);
+        }
+
+        .file-btn .file-status {
+            font-size: 0.7em;
+            margin-top: 3px;
+            padding: 2px 6px;
+            border-radius: 5px;
+            display: inline-block;
+        }
+
+        .status-working { background: rgba(0,210,106,0.15); color: var(--success); }
+        .status-patched { background: rgba(255,71,87,0.15); color: var(--danger); }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 400px;
+            width: 100%;
+            border: 2px solid var(--primary-purple);
+            position: relative;
+            animation: modalPop 0.3s ease;
+        }
+
+        @keyframes modalPop {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-dark-grey);
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+
+        .modal-close:hover { color: var(--danger); }
+
+        .modal-file-icon { font-size: 3em; color: var(--primary-purple); margin-bottom: 15px; }
+        .modal-file-name { font-size: 1.3em; font-weight: bold; color: var(--primary-yellow); margin-bottom: 10px; }
+
+        .modal-file-details { text-align: left; margin: 15px 0; }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .detail-row:last-child { border-bottom: none; }
+        .detail-label { color: var(--text-dark-grey); }
+        .detail-value { color: var(--text-light); font-weight: 600; }
+
+        .modal-download-btn {
+            width: 100%;
+            background: var(--primary-purple);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.2s;
+        }
+
+        .modal-download-btn:hover { background: var(--primary-yellow); color: var(--dark-bg); }
+
+        .no-files {
+            color: var(--text-dark-grey);
+            text-align: center;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        .hidden { display: none !important; }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-purple);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .sync-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.8em;
+            margin-bottom: 15px;
+        }
+
+        .sync-status.connected { color: var(--success); }
+        .sync-status.connecting { color: var(--primary-yellow); }
+        .sync-status.error { color: var(--danger); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Back Button -->
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i> Back to Home
+        </a>
+
+        <h1 class="page-title">SAFE LOCATION</h1>
+        <p>ANTI-BAN SAFE ZONE</p>
+
+        <div class="info-box">
+            <h4>Features:</h4>
+            <ul>
+                <li>Auto Aim</li>
+                <li>ESP Box</li>
+                <li>No Recoil</li>
+                <li>Speed Hack</li>
+                <li>Anti-Ban Protection</li>
+                <li>Safe Zone Detection</li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <h4>Requirements:</h4>
+            <ul>
+                <li>Android 8+</li>
+                <li>No Need Root</li>
+                <li>Free Fire Max</li>
+                <li>3GB+ RAM</li>
+            </ul>
+        </div>
+
+        <!-- Sync Status -->
+        <div class="sync-status connecting" id="syncStatus">
+            <div class="loading-spinner" style="width: 14px; height: 14px;"></div>
+            <span>Syncing with Firebase...</span>
+        </div>
+
+        <!-- ===== MAIN DOWNLOAD ===== -->
+        <div id="mainDownloadSection">
+            <!-- JS se populate hoga -->
+        </div>
+
+        <!-- ===== PREVIOUS UPLOADS ===== -->
+        <div class="previous-section">
+            <h3><i class="fas fa-history"></i> Previous Versions</h3>
+            <div id="previousFilesContainer">
+                <div class="no-files">
+                    <div class="loading-spinner"></div>
+                    <p style="margin-top: 10px;">Loading files...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FILE DETAILS MODAL -->
+    <div class="modal-overlay" id="fileModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div style="text-align: center;">
+                <div class="modal-file-icon"><i class="fas fa-shield-alt"></i></div>
+                <div class="modal-file-name" id="modalFileName">File Name</div>
+            </div>
+            <div class="modal-file-details">
+                <div class="detail-row">
+                    <span class="detail-label">Version:</span>
+                    <span class="detail-value" id="modalVersion">v1.0</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Size:</span>
+                    <span class="detail-value" id="modalSize">--</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Uploaded:</span>
+                    <span class="detail-value" id="modalDate">--</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value" id="modalStatus" style="color: #00d26a;">Working</span>
+                </div>
+            </div>
+            <button class="modal-download-btn" id="modalDownloadBtn">
+                <i class="fas fa-download"></i> Download File
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // ===== FIREBASE CONFIG =====
+        const FIREBASE_URL = 'https://nova-dashboard-2917a-default-rtdb.firebaseio.com/';
+        const FILES_PATH = 'safe_location_files'; // Separate path for Safe Location
+
+        let filesDatabase = [];
+
+        // ===== FIREBASE FUNCTIONS =====
+        async function fetchFilesFromFirebase() {
+            try {
+                const response = await fetch(`${FIREBASE_URL}${FILES_PATH}.json`);
+                const data = await response.json();
+                if (data) {
+                    filesDatabase = Object.entries(data).map(([key, value]) => ({
+                        firebaseKey: key,
+                        ...value
+                    }));
+                } else {
+                    filesDatabase = [];
+                }
+                updateSyncStatus('connected', 'Live - Connected to Firebase');
+                renderFiles();
+            } catch (error) {
+                console.error('Firebase error:', error);
+                updateSyncStatus('error', 'Connection failed. Retrying...');
+                setTimeout(fetchFilesFromFirebase, 5000);
+            }
+        }
+
+        // ===== SYNC STATUS =====
+        function updateSyncStatus(status, message) {
+            const el = document.getElementById('syncStatus');
+            el.className = `sync-status ${status}`;
+            if (status === 'connecting') {
+                el.innerHTML = `<div class="loading-spinner" style="width: 14px; height: 14px;"></div><span>${message}</span>`;
+            } else if (status === 'connected') {
+                el.innerHTML = `<i class="fas fa-wifi"></i><span>${message}</span>`;
+            } else {
+                el.innerHTML = `<i class="fas fa-exclamation-circle"></i><span>${message}</span>`;
+            }
+        }
+
+        // ===== RENDER FILES =====
+        function renderFiles() {
+            const today = getTodayDate();
+            const mainSection = document.getElementById('mainDownloadSection');
+            const previousContainer = document.getElementById('previousFilesContainer');
+
+            const todayFiles = filesDatabase.filter(f => f.uploadDate === today);
+            const previousFiles = filesDatabase.filter(f => f.uploadDate !== today);
+
+            // ===== RENDER TODAY'S FILE =====
+            if (todayFiles.length === 0) {
+                mainSection.innerHTML = `
+                    <div class="main-download-section">
+                        <h3><i class="fas fa-clock"></i> No Update Today</h3>
+                        <div class="no-today-file">
+                            <p>Today's Safe Location file not uploaded yet.</p>
+                            <p style="font-size: 0.8em; margin-top: 5px;">Check previous versions below</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const latestToday = todayFiles.sort((a, b) => b.id - a.id)[0];
+                
+                mainSection.innerHTML = `
+                    <div class="main-download-section">
+                        <h3><i class="fas fa-star"></i> Latest Safe Location - ${latestToday.uploadDate}</h3>
+                        <div class="main-file-info">
+                            <p><strong>Name:</strong> ${latestToday.name}</p>
+                            <p><strong>Version:</strong> ${latestToday.version}</p>
+                            <p><strong>Size:</strong> ${latestToday.size || 'N/A'}</p>
+                            <p><strong>Status:</strong> 
+                                <span style="color: ${latestToday.status === 'Working' ? '#00d26a' : '#ff4757'}">
+                                    ${latestToday.status}
+                                </span>
+                            </p>
+                        </div>
+                        <button class="main-download-btn" onclick="window.open('${latestToday.downloadUrl}', '_blank')">
+                            <i class="fas fa-download"></i> DOWNLOAD NOW
+                        </button>
+                    </div>
+                `;
+            }
+
+            // ===== RENDER PREVIOUS FILES =====
+            if (previousFiles.length === 0) {
+                previousContainer.innerHTML = '<div class="no-files">No previous uploads</div>';
+                return;
+            }
+
+            const grouped = {};
+            previousFiles.forEach(file => {
+                if (!grouped[file.uploadDate]) grouped[file.uploadDate] = [];
+                grouped[file.uploadDate].push(file);
+            });
+
+            const sortedDates = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
+
+            previousContainer.innerHTML = sortedDates.map(date => `
+                <div class="date-group">
+                    <div class="date-label">${getRelativeDateLabel(date)}</div>
+                    <div class="file-buttons-grid">
+                        ${grouped[date].map(file => `
+                            <button class="file-btn" onclick="openModal('${file.firebaseKey}')">
+                                <i class="fas ${file.icon || 'fa-shield-alt'}"></i>
+                                ${file.name}
+                                <span class="file-status ${file.status === 'Working' ? 'status-working' : 'status-patched'}">
+                                    ${file.status}
+                                </span>
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ===== MODAL =====
+        function openModal(firebaseKey) {
+            const file = filesDatabase.find(f => f.firebaseKey === firebaseKey);
+            if (!file) return;
+
+            document.getElementById('modalFileName').textContent = file.name;
+            document.getElementById('modalVersion').textContent = file.version;
+            document.getElementById('modalSize').textContent = file.size || 'N/A';
+            document.getElementById('modalDate').textContent = formatDate(file.uploadDate);
+
+            const statusEl = document.getElementById('modalStatus');
+            statusEl.textContent = file.status;
+            statusEl.style.color = file.status === 'Working' ? '#00d26a' : file.status === 'Testing' ? '#1e90ff' : '#ff4757';
+
+            const downloadBtn = document.getElementById('modalDownloadBtn');
+            downloadBtn.onclick = () => window.open(file.downloadUrl, '_blank');
+
+            document.getElementById('fileModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('fileModal').classList.remove('active');
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function getTodayDate() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { year: 'numeric', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        function getRelativeDateLabel(dateStr) {
+            const today = getTodayDate();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yestStr = `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`;
+
+            if (dateStr === today) return "Today";
+            if (dateStr === yestStr) return "Yesterday";
+            return formatDate(dateStr);
+        }
+
+        // ===== EVENTS =====
+        document.getElementById('fileModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ===== INIT =====
+        fetchFilesFromFirebase();
+        setInterval(fetchFilesFromFirebase, 10000);
+    </script>
+</body>
+</html>
