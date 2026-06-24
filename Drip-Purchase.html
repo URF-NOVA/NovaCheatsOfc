@@ -74,7 +74,6 @@
         .contact-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(107, 33, 168, 0.4); }
         .contact-icon { font-size: 22px; }
 
-        /* QR Modal */
         .qr-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7);
@@ -96,31 +95,31 @@
         .qr-box img { width: 200px; height: 200px; border-radius: 10px; margin-bottom: 10px; }
         .qr-box .upi-id { color: #666; font-size: 13px; margin-bottom: 12px; word-break: break-all; }
 
-        /* App Buttons Grid */
         .apps-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
             margin: 12px 0;
         }
         .app-btn {
-            border: none; border-radius: 12px; padding: 12px 5px;
-            font-size: 12px; font-weight: 700; cursor: pointer;
+            border: none; border-radius: 12px; padding: 14px 5px;
+            font-size: 13px; font-weight: 700; cursor: pointer;
             transition: all 0.2s; display: flex; flex-direction: column;
-            align-items: center; gap: 4px; color: white;
+            align-items: center; gap: 5px; color: white;
             touch-action: manipulation;
         }
         .app-btn:active { transform: scale(0.95); }
-        .app-btn .app-icon { font-size: 22px; }
+        .app-btn .app-icon { font-size: 24px; }
         .phonepe-btn { background: #5f259f; box-shadow: 0 3px 10px rgba(95, 37, 159, 0.3); }
         .phonepe-btn:hover { background: #4a1d7d; }
         .gpay-btn { background: #1a73e8; box-shadow: 0 3px 10px rgba(26, 115, 232, 0.3); }
         .gpay-btn:hover { background: #1557b0; }
         .fampay-btn { background: #7c3aed; box-shadow: 0 3px 10px rgba(124, 58, 237, 0.3); }
         .fampay-btn:hover { background: #6d28d9; }
+        .paytm-btn { background: #00baf2; box-shadow: 0 3px 10px rgba(0, 186, 242, 0.3); }
+        .paytm-btn:hover { background: #0095c7; }
         .or-text { color: #888; font-size: 12px; margin: 8px 0; font-weight: 500; }
 
-        /* Buttons in modal */
         .btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
         .close-btn {
             background: #e63946; color: white; border: none; padding: 12px 40px;
@@ -129,7 +128,6 @@
         }
         .close-btn:hover { background: #d62839; }
 
-        /* Timer Running Modal */
         .timer-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
@@ -158,7 +156,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Approval Modal */
         .approval-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
@@ -190,7 +187,8 @@
             font-size: 18px; font-weight: bold; cursor: pointer;
             transition: all 0.3s; display: inline-flex;
             align-items: center; justify-content: center; gap: 10px;
-            text-decoration: none; touch-action: manipulation;
+            text-decoration: none;
+            touch-action: manipulation;
         }
         .approval-box .send-btn:hover {
             background: #1a8de4; transform: translateY(-2px);
@@ -234,7 +232,6 @@
         </a>
     </div>
 
-    <!-- QR Code Modal -->
     <div class="qr-overlay" id="qrOverlay">
         <div class="qr-box">
             <h2>Scan to Pay</h2>
@@ -252,6 +249,10 @@
                     <span class="app-icon">💳</span>
                     <span>GPay</span>
                 </button>
+                <button class="app-btn paytm-btn" onclick="openApp('paytm')">
+                    <span class="app-icon">💰</span>
+                    <span>Paytm</span>
+                </button>
                 <button class="app-btn fampay-btn" onclick="openApp('fampay')">
                     <span class="app-icon">💜</span>
                     <span>FamPay</span>
@@ -264,7 +265,6 @@
         </div>
     </div>
 
-    <!-- Timer Running Modal -->
     <div class="timer-overlay" id="timerOverlay">
         <div class="timer-box2">
             <div class="icon">⏱️</div>
@@ -278,7 +278,6 @@
         </div>
     </div>
 
-    <!-- Approval Modal -->
     <div class="approval-overlay" id="approvalOverlay">
         <div class="approval-box">
             <div class="icon">📸</div>
@@ -308,9 +307,11 @@
         let currentQRUrl = '';
         let currentAmount = 0;
         let currentUPILink = '';
+        let currentPlan = '';
 
         function generateQR(amount, plan) {
             currentAmount = amount;
+            currentPlan = plan;
             const upiId = '8750673645@fam';
             const name = 'Plan Purchase';
             const upiLink = 'upi://pay?pa=' + encodeURIComponent(upiId) 
@@ -330,26 +331,37 @@
         function openApp(appName) {
             if (!currentUPILink) return;
 
-            var link = currentUPILink;
+            var upiId = '8750673645@fam';
+            var name = 'Plan Purchase';
+            var planText = currentPlan + ' Plan';
+            var amount = currentAmount;
+
+            var freshLink = 'upi://pay?pa=' + encodeURIComponent(upiId) 
+                + '&pn=' + encodeURIComponent(name) 
+                + '&am=' + amount 
+                + '&cu=INR' 
+                + '&tn=' + encodeURIComponent(planText);
+
+            var link = freshLink;
             var isAndroid = /Android/i.test(navigator.userAgent);
 
             if (isAndroid) {
                 var packages = {
                     'phonepe': 'com.phonepe.app',
                     'gpay': 'com.google.android.apps.nbu.paisa.user',
+                    'paytm': 'net.one97.paytm',
                     'fampay': 'com.fampay.app'
                 };
                 if (packages[appName]) {
-                    link = 'intent://pay?pa=' + encodeURIComponent('8750673645@fam') 
-                        + '&pn=' + encodeURIComponent('Plan Purchase')
-                        + '&am=' + currentAmount 
+                    link = 'intent://pay?pa=' + encodeURIComponent(upiId) 
+                        + '&pn=' + encodeURIComponent(name)
+                        + '&am=' + amount 
                         + '&cu=INR'
-                        + '&tn=' + encodeURIComponent(currentAmount >= 400 ? '30 DAYS Plan' : currentAmount >= 180 ? '7 DAYS Plan' : '1 DAY Plan')
+                        + '&tn=' + encodeURIComponent(planText)
                         + '#Intent;scheme=upi;package=' + packages[appName] + ';end';
                 }
             }
 
-            // Try multiple methods to open app
             var iframe = document.createElement('iframe');
             iframe.style.display = 'none';
             document.body.appendChild(iframe);

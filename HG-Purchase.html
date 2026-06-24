@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Choose Your Plan</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #4a7c59 0%, #6b8f71 50%, #4a7c59 100%);
@@ -43,6 +43,7 @@
             display: flex; align-items: center; justify-content: center;
             gap: 12px; transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(42, 157, 244, 0.3);
+            touch-action: manipulation;
         }
         .plan-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(42, 157, 244, 0.4); }
         .plan-btn:active { transform: translateY(0); }
@@ -57,11 +58,22 @@
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             gap: 10px; margin-top: 5px; transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(196, 92, 74, 0.3);
+            touch-action: manipulation;
         }
         .back-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(196, 92, 74, 0.4); }
         .back-icon { font-size: 22px; }
+        .contact-btn {
+            width: 100%; padding: 18px 20px; border: none; border-radius: 15px;
+            background: #6b21a8; color: white; font-size: 18px; font-weight: 600;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            gap: 10px; margin-top: 12px; transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(107, 33, 168, 0.3);
+            text-decoration: none;
+            touch-action: manipulation;
+        }
+        .contact-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(107, 33, 168, 0.4); }
+        .contact-icon { font-size: 22px; }
 
-        /* QR Modal */
         .qr-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7);
@@ -70,7 +82,7 @@
         }
         .qr-overlay.active { display: flex; }
         .qr-box {
-            background: white; border-radius: 20px; padding: 30px;
+            background: white; border-radius: 20px; padding: 25px;
             text-align: center; max-width: 350px; width: 100%;
             animation: popIn 0.3s ease;
         }
@@ -78,52 +90,44 @@
             from { transform: scale(0.8); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
         }
-        .qr-box h2 { color: #333; margin-bottom: 10px; font-size: 22px; }
-        .qr-box .amount { color: #2a9df4; font-size: 28px; font-weight: bold; margin-bottom: 15px; }
-        .qr-box img { width: 220px; height: 220px; border-radius: 10px; margin-bottom: 10px; }
-        .qr-box .upi-id { color: #666; font-size: 14px; margin-bottom: 15px; word-break: break-all; }
+        .qr-box h2 { color: #333; margin-bottom: 8px; font-size: 22px; }
+        .qr-box .amount { color: #2a9df4; font-size: 28px; font-weight: bold; margin-bottom: 10px; }
+        .qr-box img { width: 200px; height: 200px; border-radius: 10px; margin-bottom: 10px; }
+        .qr-box .upi-id { color: #666; font-size: 13px; margin-bottom: 12px; word-break: break-all; }
 
-        /* Timer */
-        .timer-box {
-            background: #fff3cd; border: 2px solid #ffc107;
-            border-radius: 10px; padding: 10px 20px; margin-bottom: 15px;
-            display: flex; align-items: center; justify-content: center;
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
             gap: 8px;
+            margin: 12px 0;
         }
-        .timer-box .timer-icon { font-size: 20px; }
-        .timer-box .timer-text { font-size: 18px; font-weight: bold; color: #856404; }
-        .timer-box.expired { background: #f8d7da; border-color: #dc3545; }
-        .timer-box.expired .timer-text { color: #721c24; }
+        .app-btn {
+            border: none; border-radius: 12px; padding: 14px 5px;
+            font-size: 13px; font-weight: 700; cursor: pointer;
+            transition: all 0.2s; display: flex; flex-direction: column;
+            align-items: center; gap: 5px; color: white;
+            touch-action: manipulation;
+        }
+        .app-btn:active { transform: scale(0.95); }
+        .app-btn .app-icon { font-size: 24px; }
+        .phonepe-btn { background: #5f259f; box-shadow: 0 3px 10px rgba(95, 37, 159, 0.3); }
+        .phonepe-btn:hover { background: #4a1d7d; }
+        .gpay-btn { background: #1a73e8; box-shadow: 0 3px 10px rgba(26, 115, 232, 0.3); }
+        .gpay-btn:hover { background: #1557b0; }
+        .fampay-btn { background: #7c3aed; box-shadow: 0 3px 10px rgba(124, 58, 237, 0.3); }
+        .fampay-btn:hover { background: #6d28d9; }
+        .paytm-btn { background: #00baf2; box-shadow: 0 3px 10px rgba(0, 186, 242, 0.3); }
+        .paytm-btn:hover { background: #0095c7; }
+        .or-text { color: #888; font-size: 12px; margin: 8px 0; font-weight: 500; }
 
-        /* Buttons in modal */
-        .btn-group { display: flex; flex-direction: column; gap: 10px; }
-        .pay-btn {
-            background: #2a9df4; color: white; border: none; padding: 14px 40px;
-            border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s; text-decoration: none; display: inline-block;
-        }
-        .pay-btn:hover { background: #1a8de4; }
-        .download-btn {
-            background: #28a745; color: white; border: none; padding: 14px 40px;
-            border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s; display: inline-flex; align-items: center;
-            justify-content: center; gap: 8px; text-decoration: none;
-        }
-        .download-btn:hover { background: #218838; }
-        .download-btn:disabled {
-            opacity: 0.5; cursor: not-allowed;
-        }
+        .btn-group { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
         .close-btn {
             background: #e63946; color: white; border: none; padding: 12px 40px;
             border-radius: 25px; font-size: 16px; font-weight: 600; cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s; touch-action: manipulation;
         }
         .close-btn:hover { background: #d62839; }
-        .disabled-btn {
-            opacity: 0.5; cursor: not-allowed; pointer-events: none;
-        }
 
-        /* Timer Running Modal (after download) */
         .timer-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
@@ -140,9 +144,7 @@
             font-size: 56px; font-weight: bold; color: #2a9df4;
             margin: 20px 0; font-family: 'Courier New', monospace;
         }
-        .timer-box2 p {
-            color: #666; font-size: 16px; margin-bottom: 10px;
-        }
+        .timer-box2 p { color: #666; font-size: 16px; margin-bottom: 10px; }
         .timer-box2 .processing {
             display: flex; align-items: center; justify-content: center;
             gap: 10px; margin-top: 15px;
@@ -154,7 +156,6 @@
         }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Approval Modal */
         .approval-overlay {
             display: none; position: fixed; top: 0; left: 0;
             width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8);
@@ -187,15 +188,15 @@
             transition: all 0.3s; display: inline-flex;
             align-items: center; justify-content: center; gap: 10px;
             text-decoration: none;
+            touch-action: manipulation;
         }
         .approval-box .send-btn:hover {
             background: #1a8de4; transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(42, 157, 244, 0.4);
         }
-        
-        /* Mobile friendly adjustments */
+
         @media (max-width: 480px) {
-            .qr-box img { width: 180px; height: 180px; }
+            .qr-box img { width: 170px; height: 170px; }
             .plan-btn { font-size: 16px; padding: 15px; }
             .header-text { font-size: 16px; }
         }
@@ -211,11 +212,11 @@
 
         <button class="plan-btn" onclick="generateQR(65, '1 DAY')">
             <span class="buy-icon">BUY</span>
-            <span>1 DAYS • ₹65</span>
+            <span>1 DAYS • ₹50</span>
         </button>
         <button class="plan-btn" onclick="generateQR(180, '7 DAYS')">
             <span class="buy-icon">BUY</span>
-            <span>7 DAYS • ₹180</span>
+            <span>10 DAYS • ₹180</span>
         </button>
         <button class="plan-btn" onclick="generateQR(400, '30 DAYS')">
             <span class="buy-icon">BUY</span>
@@ -225,26 +226,45 @@
             <span class="back-icon">↩️</span>
             <span>BACK</span>
         </button>
+        <a href="tg://openmessage?user_id=7229517038" class="contact-btn" onclick="return openOwnerContact()">
+            <span class="contact-icon">👤</span>
+            <span>OWNER CONTACT</span>
+        </a>
     </div>
 
-    <!-- QR Code Modal -->
     <div class="qr-overlay" id="qrOverlay">
         <div class="qr-box">
             <h2>Scan to Pay</h2>
             <div class="amount" id="qrAmount">₹80</div>
             <img id="qrImage" src="" alt="UPI QR Code">
             <div class="upi-id">UPI ID: 8750673645@fam</div>
-            <div class="btn-group">
-                <a id="upiLink" href="" class="pay-btn">Pay with UPI App</a>
-                <button class="download-btn" id="downloadBtn" onclick="downloadQR()">
-                    📥 Download QR Code
+
+            <div class="or-text">OR PAY WITH APP</div>
+            <div class="apps-grid">
+                <button class="app-btn phonepe-btn" onclick="openApp('phonepe')">
+                    <span class="app-icon">📱</span>
+                    <span>PhonePe</span>
                 </button>
+                <button class="app-btn gpay-btn" onclick="openApp('gpay')">
+                    <span class="app-icon">💳</span>
+                    <span>GPay</span>
+                </button>
+                <button class="app-btn paytm-btn" onclick="openApp('paytm')">
+                    <span class="app-icon">💰</span>
+                    <span>Paytm</span>
+                </button>
+                <button class="app-btn fampay-btn" onclick="openApp('fampay')">
+                    <span class="app-icon">💜</span>
+                    <span>FamPay</span>
+                </button>
+            </div>
+
+            <div class="btn-group">
                 <button class="close-btn" onclick="closeQR()">Close</button>
             </div>
         </div>
     </div>
 
-    <!-- Timer Running Modal (after download) -->
     <div class="timer-overlay" id="timerOverlay">
         <div class="timer-box2">
             <div class="icon">⏱️</div>
@@ -258,7 +278,6 @@
         </div>
     </div>
 
-    <!-- Approval Modal -->
     <div class="approval-overlay" id="approvalOverlay">
         <div class="approval-box">
             <div class="icon">📸</div>
@@ -272,7 +291,6 @@
     </div>
 
     <script>
-        // Update time
         function updateTime() {
             const now = new Date();
             let hours = now.getHours();
@@ -288,71 +306,87 @@
         let timerInterval;
         let currentQRUrl = '';
         let currentAmount = 0;
+        let currentUPILink = '';
+        let currentPlan = '';
 
         function generateQR(amount, plan) {
             currentAmount = amount;
+            currentPlan = plan;
             const upiId = '8750673645@fam';
             const name = 'Plan Purchase';
-            const upiLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(plan + ' Plan')}`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}`;
+            const upiLink = 'upi://pay?pa=' + encodeURIComponent(upiId) 
+                + '&pn=' + encodeURIComponent(name) 
+                + '&am=' + amount 
+                + '&cu=INR' 
+                + '&tn=' + encodeURIComponent(plan + ' Plan');
+            const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(upiLink);
 
+            currentUPILink = upiLink;
             currentQRUrl = qrUrl;
             document.getElementById('qrAmount').textContent = '₹' + amount;
             document.getElementById('qrImage').src = qrUrl;
-            document.getElementById('upiLink').href = upiLink;
             document.getElementById('qrOverlay').classList.add('active');
-            document.getElementById('downloadBtn').disabled = false;
         }
 
-        function downloadQR() {
-            if (!currentQRUrl) return;
-            
-            // For Chrome, use fetch to download the image properly
-            fetch(currentQRUrl)
-                .then(response => response.blob())
-                .then(blob => {
-                    const link = document.createElement('a');
-                    link.href = URL.createObjectURL(blob);
-                    link.download = 'UPI_QR_Code.png';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(link.href);
-                })
-                .catch(() => {
-                    // Fallback method
-                    const link = document.createElement('a');
-                    link.href = currentQRUrl;
-                    link.download = 'UPI_QR_Code.png';
-                    link.target = '_blank';
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                });
+        function openApp(appName) {
+            if (!currentUPILink) return;
 
-            // Disable download button
-            document.getElementById('downloadBtn').disabled = true;
+            var upiId = '8750673645@fam';
+            var name = 'Plan Purchase';
+            var planText = currentPlan + ' Plan';
+            var amount = currentAmount;
 
-            // Close QR modal and show timer modal
-            document.getElementById('qrOverlay').classList.remove('active');
-            document.getElementById('timerOverlay').classList.add('active');
+            var freshLink = 'upi://pay?pa=' + encodeURIComponent(upiId) 
+                + '&pn=' + encodeURIComponent(name) 
+                + '&am=' + amount 
+                + '&cu=INR' 
+                + '&tn=' + encodeURIComponent(planText);
 
-            // Start 1:30 timer
-            startTimer(90);
+            var link = freshLink;
+            var isAndroid = /Android/i.test(navigator.userAgent);
+
+            if (isAndroid) {
+                var packages = {
+                    'phonepe': 'com.phonepe.app',
+                    'gpay': 'com.google.android.apps.nbu.paisa.user',
+                    'paytm': 'net.one97.paytm',
+                    'fampay': 'com.fampay.app'
+                };
+                if (packages[appName]) {
+                    link = 'intent://pay?pa=' + encodeURIComponent(upiId) 
+                        + '&pn=' + encodeURIComponent(name)
+                        + '&am=' + amount 
+                        + '&cu=INR'
+                        + '&tn=' + encodeURIComponent(planText)
+                        + '#Intent;scheme=upi;package=' + packages[appName] + ';end';
+                }
+            }
+
+            var iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            document.body.appendChild(iframe);
+            try { iframe.contentWindow.location.href = link; } catch(e) {}
+
+            setTimeout(function() {
+                document.body.removeChild(iframe);
+                window.location.href = link;
+            }, 300);
+
+            setTimeout(function() {
+                var w = window.open(link, '_blank');
+                if (w) w.focus();
+            }, 600);
         }
 
         function startTimer(seconds) {
             clearInterval(timerInterval);
             let remaining = seconds;
             updateBigTimer(remaining);
-
-            timerInterval = setInterval(() => {
+            timerInterval = setInterval(function() {
                 remaining--;
                 updateBigTimer(remaining);
-
                 if (remaining <= 0) {
                     clearInterval(timerInterval);
-                    // Timer finished - show approval modal
                     document.getElementById('timerOverlay').classList.remove('active');
                     document.getElementById('approvalOverlay').classList.add('active');
                 }
@@ -360,9 +394,17 @@
         }
 
         function updateBigTimer(seconds) {
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            document.getElementById('bigTimer').textContent = `${mins}:${secs}`;
+            var mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+            var secs = (seconds % 60).toString().padStart(2, '0');
+            document.getElementById('bigTimer').textContent = mins + ':' + secs;
+        }
+
+        function openOwnerContact() {
+            window.location.href = 'tg://openmessage?user_id=7229517038';
+            setTimeout(function() {
+                window.open('https://t.me/user?id=7229517038', '_blank');
+            }, 500);
+            return false;
         }
 
         function closeQR() {
@@ -376,7 +418,6 @@
             window.history.back();
         }
 
-        // Close on overlay click
         document.getElementById('qrOverlay').addEventListener('click', function(e) {
             if (e.target === this) closeQR();
         });
