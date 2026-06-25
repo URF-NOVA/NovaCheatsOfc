@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOD MENU & ROOT - NOVA CHEATS</title>
+    <title>SECOND ID - NOVA CHEATS</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
@@ -15,6 +15,8 @@
             --primary-yellow: #f9d423;
             --button-bg: #4a2a6a;
             --button-hover: #6a3a8a;
+            --today-bg: #3a2060;
+            --today-border: #8a2be2;
             --success: #00d26a;
             --danger: #ff4757;
         }
@@ -60,7 +62,7 @@
             margin-bottom: 10px;
         }
 
-        /* ===== MAIN DOWNLOAD (Today's File) ===== */
+        /* ===== MAIN DOWNLOAD BUTTON (Today's File) ===== */
         .main-download-section {
             background: linear-gradient(135deg, rgba(138,43,226,0.2), rgba(249,212,35,0.1));
             border: 2px solid var(--primary-purple);
@@ -133,12 +135,17 @@
             box-shadow: 0 5px 25px rgba(138,43,226,0.4);
         }
 
+        .main-download-btn i {
+            font-size: 1.2em;
+        }
+
         .no-today-file {
             color: var(--text-dark-grey);
             font-style: italic;
             padding: 20px;
         }
 
+        /* ===== INFO BOXES ===== */
         .info-box {
             background-color: var(--button-bg);
             border-radius: 10px;
@@ -160,7 +167,6 @@
 
         .previous-section h3 {
             color: var(--text-dark-grey);
-            margin-bottom: var(--text-dark-grey);
             margin-bottom: 15px;
             font-size: 1em;
             text-transform: uppercase;
@@ -222,7 +228,7 @@
         .status-working { background: rgba(0,210,106,0.15); color: var(--success); }
         .status-patched { background: rgba(255,71,87,0.15); color: var(--danger); }
 
-        /* ===== MODAL ===== */
+        /* ===== FILE DETAILS MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -268,10 +274,23 @@
 
         .modal-close:hover { color: var(--danger); }
 
-        .modal-file-icon { font-size: 3em; color: var(--primary-purple); margin-bottom: 15px; }
-        .modal-file-name { font-size: 1.3em; font-weight: bold; color: var(--primary-yellow); margin-bottom: 10px; }
+        .modal-file-icon {
+            font-size: 3em;
+            color: var(--primary-purple);
+            margin-bottom: 15px;
+        }
 
-        .modal-file-details { text-align: left; margin: 15px 0; }
+        .modal-file-name {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--primary-yellow);
+            margin-bottom: 10px;
+        }
+
+        .modal-file-details {
+            text-align: left;
+            margin: 15px 0;
+        }
 
         .detail-row {
             display: flex;
@@ -281,8 +300,13 @@
         }
 
         .detail-row:last-child { border-bottom: none; }
+
         .detail-label { color: var(--text-dark-grey); }
-        .detail-value { color: var(--text-light); font-weight: 600; }
+
+        .detail-value {
+            color: var(--text-light);
+            font-weight: 600;
+        }
 
         .modal-download-btn {
             width: 100%;
@@ -298,7 +322,10 @@
             transition: all 0.2s;
         }
 
-        .modal-download-btn:hover { background: var(--primary-yellow); color: var(--dark-bg); }
+        .modal-download-btn:hover {
+            background: var(--primary-yellow);
+            color: var(--dark-bg);
+        }
 
         .no-files {
             color: var(--text-dark-grey);
@@ -344,9 +371,10 @@
             <i class="fas fa-arrow-left"></i> Back to Home
         </a>
 
-        <h1 class="page-title">MOD MENU & ROOT</h1>
-        <p>ROOT ACCESS REQUIRED</p>
+        <h1 class="page-title">SECOND ID</h1>
+        <p>MOD MENU & ROOT</p>
 
+        <!-- Info Boxes -->
         <div class="info-box">
             <h4>Features:</h4>
             <ul>
@@ -354,8 +382,6 @@
                 <li>ESP Box</li>
                 <li>No Recoil</li>
                 <li>Speed Hack</li>
-                <li>Mod Menu UI</li>
-                <li>Anti-Ban</li>
             </ul>
         </div>
 
@@ -363,9 +389,8 @@
             <h4>Requirements:</h4>
             <ul>
                 <li>Android 8+</li>
-                <li>Root Access (Magisk/SuperSU)</li>
-                <li>2GB+ RAM</li>
-                <li>Free Fire Max</li>
+                <li>Root Access</li>
+                <li>2GB RAM</li>
             </ul>
         </div>
 
@@ -380,7 +405,7 @@
             <!-- JS se populate hoga -->
         </div>
 
-        <!-- ===== PREVIOUS UPLOADS ===== -->
+        <!-- ===== PREVIOUS UPLOADS (Old Files) ===== -->
         <div class="previous-section">
             <h3><i class="fas fa-history"></i> Previous Versions</h3>
             <div id="previousFilesContainer">
@@ -429,7 +454,7 @@
     <script>
         // ===== FIREBASE CONFIG =====
         const FIREBASE_URL = 'https://nova-dashboard-2917a-default-rtdb.firebaseio.com/';
-        const FILES_PATH = 'modmenu_files'; // Separate path for MOD MENU files
+        const FILES_PATH = 'second_id_files'; // Separate path for Second ID
 
         let filesDatabase = [];
 
@@ -474,26 +499,28 @@
             const mainSection = document.getElementById('mainDownloadSection');
             const previousContainer = document.getElementById('previousFilesContainer');
 
+            // Filter files
             const todayFiles = filesDatabase.filter(f => f.uploadDate === today);
             const previousFiles = filesDatabase.filter(f => f.uploadDate !== today);
 
-            // ===== RENDER TODAY'S FILE =====
+            // ===== RENDER TODAY'S FILE (Main Download) =====
             if (todayFiles.length === 0) {
                 mainSection.innerHTML = `
                     <div class="main-download-section">
                         <h3><i class="fas fa-clock"></i> No Update Today</h3>
                         <div class="no-today-file">
-                            <p>Today's MOD MENU file not uploaded yet.</p>
+                            <p>Today's file not uploaded yet.</p>
                             <p style="font-size: 0.8em; margin-top: 5px;">Check previous versions below</p>
                         </div>
                     </div>
                 `;
             } else {
+                // Get the latest today's file (if multiple)
                 const latestToday = todayFiles.sort((a, b) => b.id - a.id)[0];
-                
+
                 mainSection.innerHTML = `
                     <div class="main-download-section">
-                        <h3><i class="fas fa-star"></i> Latest MOD MENU - ${latestToday.uploadDate}</h3>
+                        <h3><i class="fas fa-star"></i> Latest Version - ${latestToday.uploadDate}</h3>
                         <div class="main-file-info">
                             <p><strong>Name:</strong> ${latestToday.name}</p>
                             <p><strong>Version:</strong> ${latestToday.version}</p>
@@ -511,12 +538,13 @@
                 `;
             }
 
-            // ===== RENDER PREVIOUS FILES =====
+            // ===== RENDER PREVIOUS FILES (Buttons) =====
             if (previousFiles.length === 0) {
                 previousContainer.innerHTML = '<div class="no-files">No previous uploads</div>';
                 return;
             }
 
+            // Group by date
             const grouped = {};
             previousFiles.forEach(file => {
                 if (!grouped[file.uploadDate]) grouped[file.uploadDate] = [];
@@ -597,6 +625,8 @@
 
         // ===== INIT =====
         fetchFilesFromFirebase();
+
+        // Auto-refresh every 10 seconds
         setInterval(fetchFilesFromFirebase, 10000);
     </script>
 </body>
